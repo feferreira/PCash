@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Widget</string>
+   <string>PCash - Desktop</string>
   </property>
   <widget class="QGroupBox" name="groupBox_2">
    <property name="geometry">
@@ -231,6 +231,16 @@
     <attribute name="title">
      <string>Carteira</string>
     </attribute>
+    <widget class="QTableView" name="carteiraTableView">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>581</width>
+       <height>331</height>
+      </rect>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
@@ -262,6 +272,19 @@
      </property>
     </widget>
    </widget>
+  </widget>
+  <widget class="QLabel" name="statusLabel">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>590</y>
+     <width>401</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>status</string>
+   </property>
   </widget>
  </widget>
  <resources/>

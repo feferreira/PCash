@@ -19,6 +19,8 @@ CarteiraModel::CarteiraModel()
 
 bool CarteiraModel::refresh()
 {
+    emit layoutAboutToBeChanged();
+    data_table.clear();
     query = QSqlQuery("select * from carteira_atual",conn->getDb());
     record = query.record();
     for(int c = 0; c < record.count()+COLUNAS_ADICIONAIS; c++){
@@ -36,11 +38,13 @@ bool CarteiraModel::refresh()
         }
         data_table.push_back(row);
     }
-    //qDebug() << record.count() << query.size();
+    emit layoutChanged();
+    return true;
 }
 
 int CarteiraModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return query.size();
 }
 
@@ -55,8 +59,6 @@ QVariant CarteiraModel::data(const QModelIndex &item, int role) const
     return data_table.at(item.row()).at(item.column());
     else return QVariant();
 }
-
-
 
 
 QVariant CarteiraModel::headerData(int section, Qt::Orientation orientation, int role) const

@@ -18,7 +18,7 @@ bool Proventos::getListaTipoProvento()
 
 }
 
-bool Proventos::insertProvento(QString data, QString papel, unsigned int preco, unsigned int corretora, unsigned int tipo)
+bool Proventos::insertProvento(QString data, QString papel, unsigned int valor, unsigned int corretora, unsigned int tipo)
 {
     unsigned int papel_id{0};
     QSqlQuery query(conn->getDb());
@@ -34,11 +34,11 @@ bool Proventos::insertProvento(QString data, QString papel, unsigned int preco, 
         return false;
     }
     query.prepare("INSERT INTO public.provento "
-                  "(data_provento, papel, corretora, provento_papel, tipo_provento) "
-                  "VALUES(:data, :papel, :corretora, :preco, :tipo)");
+                  "(data_provento, papel, corretora, total_provento, tipo_provento) "
+                  "VALUES(:data, :papel, :corretora, :valor, :tipo)");
     query.bindValue(":data", data);
     query.bindValue(":papel",papel_id);
-    query.bindValue(":preco",preco);
+    query.bindValue(":valor",valor);
     query.bindValue(":corretora", corretora);
     query.bindValue(":tipo",tipo);
     if(!query.exec()){

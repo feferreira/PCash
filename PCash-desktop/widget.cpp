@@ -9,10 +9,14 @@
 #include <QSqlQueryModel>
 #include <QAbstractTableModel>
 #include "carteiramodel.h"
+#include "pgconnection.h"
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
     , op(new Operacao)
+    , carteiraModel (new CarteiraModel)
+    , operacaoModel (new QSqlQueryModel)
+    , proventoModel (new QSqlQueryModel)
     , ui(new Ui::Widget)
 {
     ui->setupUi(this);
@@ -20,13 +24,24 @@ Widget::Widget(QWidget *parent)
     this->ui->dataProvento->setDate(QDate::currentDate());
     getValoresDefault();
     op->setConn(conn);
-    ui->operacaoTableView->setModel(op->getModel());
-    ui->operacaoTableView->show();
+    carteiraModel->setConn(conn);
+    carteiraModel->refresh();
+    operacaoModel->setQuery("select * from historico_operacao",conn->getDb());
+    proventoModel->setQuery("select * from historico_provento",conn->getDb());
+    ui->proventoTableView->setModel(proventoModel);
+    ui->operacaoTableView->setModel(operacaoModel);
+    ui->carteiraTableView->setModel(carteiraModel);
+    ui->carteiraTableView->show();
 }
 
 void Widget::setConnection(PgConnection *conn)
 {
     this->conn = conn;
+}
+
+void Widget::refreshModels()
+{
+    carteiraModel->refresh();
 }
 
 Widget::~Widget()
@@ -70,9 +85,13 @@ void Widget::on_InsereOrdem_clicked()
     }
     Operacao ordem;
     ordem.setConn(conn);
-    ordem.insertOrdem(data,papel,quantidade,preco,corretora,operacao);
-    this->ui->dataOrdem->setDate(QDate::currentDate());
-
+    if(ordem.insertOrdem(data,papel,quantidade,preco,corretora,operacao)){
+        refreshModels();
+        this->ui->statusLabel->setText("operação inserida!");
+    }
+    else{
+        this->ui->statusLabel->setText("falha inserindo operação");
+    }
 }
 
 void Widget::on_insereProvento_clicked()
@@ -83,6 +102,12 @@ void Widget::on_insereProvento_clicked()
     unsigned int tipo = this->ui->comboTipoProvento->currentData().toInt();
     QString data = this->ui->dataProvento->date().toString(Qt::DateFormat::ISODate);
     Proventos p;
-    p.insertProvento(data,papel,preco,corretora,tipo);
+    if(p.insertProvento(data,papel,preco,corretora,tipo)){
+        refreshModels();
+        this->ui->statusLabel->setText("provento inserido!");
+    }
+    else{
+        this->ui->statusLabel->setText("falha inserindo provento");
+    }
 
 }

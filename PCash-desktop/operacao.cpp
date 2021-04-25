@@ -7,7 +7,7 @@
 #include "carteiramodel.h"
 #include <QSqlQueryModel>
 
-Operacao::Operacao() : queryModel (new CarteiraModel), query(new QSqlQuery)
+Operacao::Operacao() : query(new QSqlQuery)
 {
 
 }
@@ -45,11 +45,4 @@ bool Operacao::insertOrdem(QString data, QString papel, unsigned int quantidade,
     }
     qDebug() << "inseriu";
     return true;
-}
-
-CarteiraModel * Operacao::getModel()
-{
-    queryModel->setConn(conn);
-    queryModel->refresh();
-    return queryModel;
 }

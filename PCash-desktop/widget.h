@@ -9,14 +9,20 @@ QT_END_NAMESPACE
 
 class PgConnection;
 class Operacao;
+class CarteiraModel;
+class QSqlQueryModel;
 
 class Widget : public QWidget
 {
     Q_OBJECT
     Operacao *op{nullptr};
+    CarteiraModel* carteiraModel{nullptr};
+    QSqlQueryModel *operacaoModel{nullptr};
+    QSqlQueryModel *proventoModel{nullptr};
 public:
     Widget(QWidget *parent = nullptr);
     void setConnection(PgConnection *conn);
+    void refreshModels();
     ~Widget();
 
 private slots:
