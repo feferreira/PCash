@@ -10,6 +10,7 @@
 #include <QAbstractTableModel>
 #include "carteiramodel.h"
 #include "pgconnection.h"
+#include <QDebug>
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
@@ -25,13 +26,16 @@ Widget::Widget(QWidget *parent)
     getValoresDefault();
     op->setConn(conn);
     carteiraModel->setConn(conn);
-    carteiraModel->refresh();
-    operacaoModel->setQuery("select * from historico_operacao",conn->getDb());
-    proventoModel->setQuery("select * from historico_provento",conn->getDb());
+    refreshModels();
+    ui->proventoTableView->setCornerButtonEnabled(false);
+    ui->proventoTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->proventoTableView->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->operacaoTableView->setCornerButtonEnabled(false);
     ui->proventoTableView->setModel(proventoModel);
     ui->operacaoTableView->setModel(operacaoModel);
     ui->carteiraTableView->setModel(carteiraModel);
     ui->carteiraTableView->show();
+    this->ui->removeProvento->setEnabled(false);
 }
 
 void Widget::setConnection(PgConnection *conn)
@@ -42,6 +46,8 @@ void Widget::setConnection(PgConnection *conn)
 void Widget::refreshModels()
 {
     carteiraModel->refresh();
+    operacaoModel->setQuery("select * from historico_operacao",conn->getDb());
+    proventoModel->setQuery("select * from historico_provento",conn->getDb());
 }
 
 Widget::~Widget()
@@ -110,4 +116,26 @@ void Widget::on_insereProvento_clicked()
         this->ui->statusLabel->setText("falha inserindo provento");
     }
 
+}
+
+void Widget::on_removeProvento_clicked()
+{
+    int row =  this->ui->proventoTableView->currentIndex().row();
+    int proventoId = this->ui->proventoTableView->model()->index(row,0).data().toInt();
+    Proventos p;
+    if(p.removeProvento(proventoId)){
+        this->ui->statusLabel->setText("provento removido!");
+    }
+    else{
+        this->ui->statusLabel->setText("Falha removendo provento");
+    }
+    this->ui->removeProvento->setEnabled(false);
+    refreshModels();
+}
+
+void Widget::on_proventoTableView_clicked(const QModelIndex &index)
+{
+    if(index.isValid()){
+        this->ui->removeProvento->setEnabled(true);
+    }
 }

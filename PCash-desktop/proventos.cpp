@@ -25,6 +25,7 @@ bool Proventos::insertProvento(QString data, QString papel, unsigned int valor, 
     query.prepare("select papel_id from papel where cod_neg = :nome");
     query.bindValue(":nome",papel.toUpper());
     if(!query.exec()){
+        qDebug() << query.lastError().text();
         return false;
     }
     if(query.next()){
@@ -45,7 +46,18 @@ bool Proventos::insertProvento(QString data, QString papel, unsigned int valor, 
         qDebug() << query.lastError().text();
         return false;
     }
-    qDebug() << "deubom";
     return true;
 
+}
+
+bool Proventos::removeProvento(int proventoId)
+{
+    QSqlQuery query(conn->getDb());
+    query.prepare("DELETE FROM public.provento WHERE provento_id = :provId");
+    query.bindValue(":provId", proventoId);
+    if(!query.exec()){
+        qDebug() << query.lastError().text();
+        return false;
+    }
+    return true;
 }
