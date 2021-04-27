@@ -34,7 +34,9 @@ Widget::Widget(QWidget *parent)
     ui->proventoTableView->setModel(proventoModel);
     ui->operacaoTableView->setModel(operacaoModel);
     ui->carteiraTableView->setModel(carteiraModel);
-    ui->carteiraTableView->show();
+    ui->operacaoTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->operacaoTableView->setSelectionMode(QAbstractItemView::SingleSelection);
+    this->ui->removeOperacao->setEnabled(false);
     this->ui->removeProvento->setEnabled(false);
 }
 
@@ -137,5 +139,29 @@ void Widget::on_proventoTableView_clicked(const QModelIndex &index)
 {
     if(index.isValid()){
         this->ui->removeProvento->setEnabled(true);
+    }
+}
+
+void Widget::on_removeOperacao_clicked()
+{
+    int row =  this->ui->operacaoTableView->currentIndex().row();
+    int operacaoId = this->ui->operacaoTableView->model()->index(row,0).data().toInt();
+    Operacao o;
+    if(o.removeOperacao(operacaoId)){
+        this->ui->statusLabel->setText("operação removida!");
+    }
+    else{
+        this->ui->statusLabel->setText("Falha removendo operação");
+    }
+    this->ui->removeOperacao->setEnabled(false);
+    refreshModels();
+}
+
+
+
+void Widget::on_operacaoTableView_clicked(const QModelIndex &index)
+{
+    if(index.isValid()){
+        this->ui->removeOperacao->setEnabled(true);
     }
 }

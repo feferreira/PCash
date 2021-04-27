@@ -34,6 +34,10 @@ private slots:
 
     void on_proventoTableView_clicked(const QModelIndex &index);
 
+    void on_removeOperacao_clicked();
+
+    void on_operacaoTableView_clicked(const QModelIndex &index);
+
 private:
     PgConnection *conn{nullptr};
     Ui::Widget *ui;

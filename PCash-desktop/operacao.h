@@ -19,6 +19,7 @@ class Operacao : public Data
 public:
     Operacao();
     bool insertOrdem(QString data, QString papel, unsigned int quantidade, unsigned int preco, unsigned int corretora, unsigned int operacao);
+    bool removeOperacao(int operacaoId);
 };
 
 #endif // OPERACAO_H

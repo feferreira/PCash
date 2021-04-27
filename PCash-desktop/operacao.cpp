@@ -24,7 +24,6 @@ bool Operacao::insertOrdem(QString data, QString papel, unsigned int quantidade,
     }
     if(query.next()){ 
         papel_id = query.value(0).toInt();
-        qDebug() << papel_id;
     }
     else{
         qDebug() << "não encontrou papel_id";
@@ -43,6 +42,17 @@ bool Operacao::insertOrdem(QString data, QString papel, unsigned int quantidade,
         qDebug() << "não executou query";
         return false;
     }
-    qDebug() << "inseriu";
+    return true;
+}
+
+bool Operacao::removeOperacao(int operacaoId)
+{
+    QSqlQuery query(conn->getDb());
+    query.prepare("DELETE FROM public.operacao WHERE operacao_id = :operaId");
+    query.bindValue(":operaId", operacaoId);
+    if(!query.exec()){
+        qDebug() << query.lastError().text();
+        return false;
+    }
     return true;
 }
