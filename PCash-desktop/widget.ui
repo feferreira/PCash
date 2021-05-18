@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -37,6 +37,32 @@
        <width>581</width>
        <height>331</height>
       </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_9">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>380</y>
+       <width>101</width>
+       <height>18</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Total Investido:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelTotalInvestido">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>380</y>
+       <width>58</width>
+       <height>18</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>R$:</string>
      </property>
     </widget>
    </widget>

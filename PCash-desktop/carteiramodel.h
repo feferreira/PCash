@@ -8,16 +8,25 @@
 
 class PgConnection;
 
+enum COLUNA{
+    COD_NEG = 0,
+    BDI,
+    TOTAL,
+    INVESTIDO,
+    PERCENTUAL
+};
+
 class CarteiraModel : public QAbstractTableModel
 {
-    const int COLUNAS_ADICIONAIS = 3;
     QSqlRecord record;
     QSqlQuery query;
-    QStringList colunas;
+    QStringList colunas; // nome das colunas
     std::vector<std::vector<QVariant>> data_table;
     QModelIndex last = QModelIndex();
     PgConnection *conn{nullptr};
+
 public:
+    int totalInvestido;
     void setConn(PgConnection *conn);;
     CarteiraModel();
     bool refresh();
@@ -31,6 +40,7 @@ public:
 
     bool insertColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
     bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
+    void inserirColunaPercentual();
 };
 
 #endif // CARTEIRAMODEL_H

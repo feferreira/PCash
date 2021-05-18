@@ -50,6 +50,7 @@ void Widget::refreshModels()
     carteiraModel->refresh();
     operacaoModel->setQuery("select * from historico_operacao",conn->getDb());
     proventoModel->setQuery("select * from historico_provento",conn->getDb());
+    this->ui->labelTotalInvestido->setNum(carteiraModel->totalInvestido);
 }
 
 Widget::~Widget()
